@@ -1,0 +1,130 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+<div class="p-2">
+ 
+    
+  <div class="row mt-4 ">
+    <div class="col-md-6 col-12 text-center" > 
+      {% if listing.image %}
+        <img  style="max-width: 80%; max-height: 80%;"  
+        id="main-image" src="{{ listing.image.url }}" alt="{{ listing.title }}">
+      {% endif %}
+    </div>
+    
+    <div class="col-md-6 col-12 pt-2">
+       {% if messages %}
+          <div class="alert alert-warning" role="alert">
+                {% for message in messages %}
+                  <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+          </div> 
+       {% endif %}
+       <div class="d-flex p-2">
+          <h2 class="text-uppercase">{{listing.title }}</h2>
+          <div class="ml-auto">
+            {% if user.is_authenticated %}
+              {% if isItInWatchlist %}
+                <form action="{% url 'remove_watchlist' listing_id=listing.id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-warning" type="submit">Unwatchlist</button>
+                </form>
+              {% else %}
+                <form action="{% url 'add_watchlist' listing_id=listing.id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn btn-outline-warning" type="submit">Watchlist</button>
+                </form>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      <div class="about">{{ listing.description }}</div>
+      <hr>
+      <small>Starting bid:${{ listing.starting_bid }}</small>
+      {% if max_price.bid_amount__max is  None %}
+        <h4><span class="font-weight-bold">${{ listing.starting_bid }}</span></h4>
+      {% else %}
+        <h4><span class="font-weight-bold">${{ max_price.bid_amount__max }}</span></h4>
+      {% endif %}
+
+      {% if user.is_authenticated  %}
+          {% if listing.active %}
+            <p class="small">{{ number_bids }} bid(s) so far. Your bid is the current bid.</p>
+
+
+            {% if listing.user == user %}
+            <form action="{% url 'close_listing' listing_id=listing.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-sm btn-danger"  value="Close auction">
+            </form>
+            {% else %}
+            <form action="{% url 'add_bid' listing_id=listing.id %}" method="post" class="form-inline">
+              {% csrf_token %}
+              <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">$</span>
+                </div>
+                {{ getPrice.getPrice }}
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Place bid</button>
+            </form>
+            {% endif %}
+
+
+           
+          {% else %}
+            {% if listing.winner == user %}
+              <div class="alert alert-success" role="alert">
+                Congratulations, You Won this auctions..!
+              </div>
+            {% else %}
+              <div class="alert alert-info" role="alert">
+                This Listing is Closed..!
+              </div>
+            {% endif %}
+        {% endif %}
+      {% endif %}
+      <br>
+      <h5>Details</h5>
+      <ul>
+          <li>Created: {{ listing.created_at }}</li>
+          <li>Listed by: {{ listing.user }}</li>
+          <li>Category: {{ listing.category }}</li>  
+      </ul>
+
+      <div class="mt-4">
+        <h5>Comments</h5>
+        <div class="pt-2">
+          {% if user.is_authenticated  %}
+            <form action="{% url 'add_comment' listing_id=listing.id %}" method="POST" class="form-inline">
+               {% csrf_token%}
+              <div class="form-group mx-sm-3 mb-2">
+                <input type="text" class="form-control" name="new_comment" placeholder="Your comment...">
+              </div>
+              <button type="submit" class="btn btn-secondary mb-2">Comment</button>
+            </form>
+          {% endif %}
+          <br>
+          <div>
+            {% for comment in all_comment %}
+              <small class="text-small">
+                <strong> {{ comment.user }}</strong>&nbsp;
+                <span class="text-break">{{ comment.text }}</span>
+                <br>
+                <small>{{ comment.created_at }}</small>
+           </small>
+              <hr>
+              {% empty %}
+              <small>No comments added yet...</small>
+              {% endfor %}
+          </div>
+      </div> 
+
+    </div>
+  </div>
+</div>   
+{% endblock %}
