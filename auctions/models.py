@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
+# Username:admin Username:admin0 Username:User-1 pass:12345
 class User(AbstractUser):
     pass
 
