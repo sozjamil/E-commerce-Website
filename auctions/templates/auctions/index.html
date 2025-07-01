@@ -6,15 +6,21 @@
     <div class="row mx-3">
         {% for listing in listings %}
           <div class="col-md-3 mb-12 my-2 " class="list">
-              <a href="{% url 'single_listing' listing.id %}" class="link">
-                <div class="card p-3" >
-                  <img src="{{ listing.image.url }}"  class="card-img-top img-fluid" width="96" height="350" alt="{{ listing.title }}">
-                  <h5 class="title mt-2">{{ listing.title }}</h5>
-                  <h6>Price: <span style="font-size: 1.5em; ">${{ listing.starting_bid }}</span></h6>
-                  <p class="description">{{ listing.description }}</p>
-                  <p class="description">Created {{ listing.created_at }}</p>
+            <a href="{% url 'single_listing' listing.id %}" class="text-decoration-none w-100">
+              <div class="card h-100 shadow-sm listing-card">
+                {% if listing.image %}
+                  <img src="{{ listing.image.url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ listing.title }}">
+                {% else %}
+                  <img src="https://via.placeholder.com/350x220?text=No+Image" class="card-img-top" style="height: 220px; object-fit: cover;" alt="No image available">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title mb-1">{{ listing.title }}</h5>
+                  <h6 class="card-subtitle mb-2 text-success">Price: <span class="fw-bold">${{ listing.starting_bid }}</span></h6>
+                  <p class="card-text text-muted small mb-2">{{ listing.description|truncatechars:80 }}</p>
+                  <p class="card-text text-end text-secondary small mt-auto">Created {{ listing.created_at|date:"M d, Y" }}</p>
                 </div>
-              </a>
+              </div>
+            </a>
           </div>
         {% endfor %}
     </div>
