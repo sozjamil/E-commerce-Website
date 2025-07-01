@@ -98,7 +98,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
-@login_required    
+# @login_required    
 def all_category(request):
     # users view all categories auctions containing closed auctions
     active_listing=AuctionListing.objects.all()
@@ -109,7 +109,7 @@ def all_category(request):
     })
 
 
-@login_required
+# @login_required
 def show_category(request,category_id):
     # user can select a specific category to view this categories auctions 
     category=get_object_or_404(Category,id=category_id)
@@ -140,7 +140,7 @@ def create_listing(request):
     })
 
 
-@login_required
+# @login_required
 def single_listing(request, listing_id):
     # showing each listing with details 
     listing = AuctionListing.objects.get(pk=listing_id)
