@@ -5,54 +5,71 @@
 <head>
     <title>{% block title %}Auctions{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS (only one version needed) -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <!-- eBay-like Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'all_category' %}">Auctions</a>
+            <a class="navbar-brand fw-bold text-primary" href="{% url 'index' %}">
+                <i class="bi bi-bag-check-fill me-1"></i> Auctions
+            </a>
+            <form class="d-none d-lg-flex ms-3 flex-grow-1" method="get" action="{% url 'search' %}">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search listings..." aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+            </form>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+                        <a class="nav-link" href="{% url 'index' %}"><i class="bi bi-house-door me-1"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'all_category' %}">Categories</a>
+                        <a class="nav-link" href="{% url 'all_category' %}"><i class="bi bi-grid me-1"></i> Categories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                        <a class="nav-link" href="{% url 'watchlist' %}"><i class="bi bi-heart me-1"></i> Watchlist</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+                        <a class="nav-link" href="{% url 'create' %}"><i class="bi bi-plus-circle me-1"></i> Sell</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <span class="navbar-text text-white me-2">
-                                Signed in as <strong>{{ user.username }}</strong>
-                            </span>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                {% comment %} <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="bi bi-person"></i> Profile</a></li> {% endcomment %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Log Out</a></li>
+                            </ul>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                            <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right me-1"></i> Log In</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                            <a class="nav-link" href="{% url 'register' %}"><i class="bi bi-person-plus me-1"></i> Register</a>
                         </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
+        <!-- Mobile search bar -->
+        <form class="d-lg-none w-100 px-3 pb-2" method="get" action="{% url 'search' %}">
+            <div class="input-group">
+                <input class="form-control" type="search" name="q" placeholder="Search listings..." aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
     </nav>
 
     <div class="container">

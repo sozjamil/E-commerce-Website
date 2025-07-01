@@ -229,3 +229,19 @@ def close_listing(request, listing_id):
         listing.save()
     return redirect(reverse('index'))
 
+from django.db.models import Q
+
+def search(request):
+    query = request.GET.get('q', '').strip()
+    results = []
+    if query:
+        results = AuctionListing.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query),
+            active=True
+        ).order_by('-created_at')
+    categories = Category.objects.all()
+    return render(request, "auctions/search.html", {
+        "query": query,
+        "results": results,
+        "categories": categories
+    })
