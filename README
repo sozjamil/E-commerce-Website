@@ -1,0 +1,56 @@
+# Commerce Auctions
+
+This is a Django-based web application for online auctions, inspired by eBay. Users can create listings, place bids, comment, and manage a watchlist.
+
+## Features
+
+- User registration and authentication
+- Create, view, and close auction listings
+- Upload images for listings
+- Place bids on active listings
+- Add and view comments on listings
+- Browse listings by category
+- Manage a personal watchlist
+
+## Project Structure
+
+- `auctions/` - Main app containing models, views, templates, and static files
+- `commerce/` - Django project settings and configuration
+- `media/` - Uploaded images
+
+## Setup Instructions
+
+1. **Clone the repository**
+
+2. **Install dependencies**
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. **Apply migrations**
+   ```
+   python manage.py migrate
+   ```
+
+4. **Create a superuser (optional)**
+   ```
+   python manage.py createsuperuser
+   ```
+
+5. **Run the development server**
+   ```
+   python manage.py runserver
+   ```
+
+6. **Access the app**
+   - Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser.
+
+## Notes
+
+- Uploaded images are stored in the `media/images/` directory.
+- Static files are managed in `auctions/static/auctions/`.
+- The default database is SQLite (`db.sqlite3`).
+
+## License
+
+This project is for educational purposes.
