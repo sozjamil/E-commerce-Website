@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 # Username:admin Username:admin0 Username:User-1 pass:12345
 class User(AbstractUser):
@@ -15,7 +16,7 @@ class AuctionListing(models.Model):
     title = models.CharField(max_length=64, null=False)
     description = models.TextField(max_length=256)
     starting_bid = models.DecimalField(max_digits=5, decimal_places=1, null=False)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)

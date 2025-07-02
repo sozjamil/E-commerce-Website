@@ -21,6 +21,12 @@ class ListingForm(forms.ModelForm):
         fields = ['title', 'description',
                   'starting_bid', 'image', 'category'
                   ]
+        widgets = {
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control-file',
+                'accept': 'image/*'  # Ensures only images can be uploaded
+            }),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
